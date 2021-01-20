@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
@@ -13,33 +13,52 @@ import { catchError, retry } from 'rxjs/operators';
 export class AppComponent {
   // title = 'splash';
   url = '';
-  images: any;
+  selectedFile: any = File;
   constructor(private http: HttpClient) {}
-  selectFile(event: any) {
+  onFileSelected(event: any) {
     if (event.target.files) {
-      const reader = new FileReader();
+      var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
       reader.onload = (event: any) => {
         this.url = event.target.result;
-        console.log(this.url);
-
-        // this.http
-        //   .post('http://localhost:5000/upload-images', {
-        //     image: this.url,
-        //   })
-        //   .subscribe(
-        //     (res) => console.log(res),
-        //     (err) => console.log(err)
-        //   );
       };
     }
+    this.selectedFile = <File>event.target.files[0];
   }
-  onSubmit() {
-    const formData = new FormData();
-    formData.append('file', this.images);
-    this.http.post('http://localhost:5000/upload-images', formData).subscribe(
-      (res) => console.log(res),
-      (err) => console.log(err)
-    );
+  onUpload() {
+    const fd = new FormData();
+    fd.append('image', this.selectedFile, this.selectedFile.name);
+    this.http
+      .post('http://localhost:5000/upload-images', fd, {
+        reportProgress: true,
+        observe: 'events',
+      })
+      .subscribe((event) => {
+        if (event.type === HttpEventType.UploadProgress) {
+          console.warn('uploading');
+        } else if (event.type === HttpEventType.Response) {
+          console.warn('uploaded');
+        }
+        console.warn(event);
+      });
   }
 }
+
+// selectFile(event: any) {
+//   if (event.target.files) {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(event.target.files[0]);
+//     reader.onload = (event: any) => {
+//       this.url = event.target.result;
+//       console.log(this.url);
+
+//       this.http
+//         .post('http://localhost:5000/upload-images', {
+//           image: this.url,
+//         })
+//         .subscribe((data) => {
+//           console.log(data);
+//         });
+//     };
+//   }
+// }
