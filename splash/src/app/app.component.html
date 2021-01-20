@@ -1,6 +1,7 @@
 <!-- <router-outlet></router-outlet> -->
 
 <input type="file" name="image" multiple (change)="selectFile($event)" />
+<button type="submit" (click)="onSubmit()">upload</button>
 <img [src]="url" height="350" width="350" alt="" />
 
 <!-- <div>
