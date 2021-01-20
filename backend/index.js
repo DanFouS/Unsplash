@@ -1,4 +1,4 @@
-// const cors = require("cors");
+const cors = require("cors");
 // const { url } = require("inspector");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,9 +7,7 @@ const cloudinary = require("./cloudinary");
 const fs = require("fs");
 const app = express();
 
-// app.use(cors({ origin: "*" }));
-// app.use(bodyParser.json);
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -31,7 +29,7 @@ app.use("/upload-images", upload.array("image"), async (req, res) => {
 
       fs.unlinkSync(path);
     }
-    console.warn("test");
+    console.warn("IT WORKS I SWEAR IT WORKS");
     res.status(200).json({
       message: "image uploaded successfully",
       data: urls,
