@@ -4,6 +4,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const upload = require("./multer");
 const cloudinary = require("./cloudinary");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 const fs = require("fs");
 const app = express();
 
@@ -14,6 +16,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get("/", (req, res, next) => {
   res.send("IT WORKS!");
 });
+
+// mngdb
+
+// mongoose.connect("mongodb://localhost:27017/taswira");
+
+// const taswira = new imageSchema({ img: { data: Buffer, contentType: String } });
+// const image = mongoose.model("image", taswira);
+
+// app.use(
+//   multer({
+//     dest: "./uploads/",
+//     rename: function (fieldname, filename) {
+//       return filename;
+//     },
+//   })
+// );
+
+// app.post("/upload-image", function (req, res) {
+//   var newImage = new image();
+//   newImage.img.data = fs.readFileSync(req.files.userPhoto.path);
+//   newImage.img.contentType = "image/png";
+//   newImage.save();
+// });
 
 // post request to cloudinary
 app.use("/upload-images", upload.array("image"), async (req, res) => {
