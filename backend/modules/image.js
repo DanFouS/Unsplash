@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const imageUpload = mongoose.Schema({
-  imageName: {
+  label: {
     type: String,
     required: true,
   },
-  url: {
+  ImageUrl: {
     type: String,
     required: true,
   },

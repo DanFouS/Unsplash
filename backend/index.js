@@ -8,6 +8,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const fs = require("fs");
 const app = express();
+const fetchRoute = require("../backend/routes/user-routes");
+
+require("dotenv").config();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,28 +20,21 @@ app.get("/", (req, res, next) => {
   res.send("IT WORKS!");
 });
 
-// mngdb
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
 
-// mongoose.connect("mongodb://localhost:27017/taswira");
+var db = mongoose.connection;
 
-// const taswira = new imageSchema({ img: { data: Buffer, contentType: String } });
-// const image = mongoose.model("image", taswira);
+db.once("open", function () {
+  console.log("mongoose connected successfully");
+});
 
-// app.use(
-//   multer({
-//     dest: "./uploads/",
-//     rename: function (fieldname, filename) {
-//       return filename;
-//     },
-//   })
-// );
-
-// app.post("/upload-image", function (req, res) {
-//   var newImage = new image();
-//   newImage.img.data = fs.readFileSync(req.files.userPhoto.path);
-//   newImage.img.contentType = "image/png";
-//   newImage.save();
-// });
+db.on("error", function (error) {
+  console.error("error mongoose didnt connect", error);
+});
 
 // post request to cloudinary
 app.use("/upload-images", upload.array("image"), async (req, res) => {
@@ -65,4 +61,8 @@ app.use("/upload-images", upload.array("image"), async (req, res) => {
     });
   }
 });
+
+app.use("/", fetchRoute);
+
 app.listen(5000, () => console.warn("server is running on port 5000"));
+module.exports.db = db;
