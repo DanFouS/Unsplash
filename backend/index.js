@@ -61,6 +61,11 @@ app.use("/upload-images", upload.array("image"), async (req, res) => {
     });
   }
 });
+//mw
+app.use(express.json());
+
+//R
+// app.use("/upload-images", require("./modules/image"));
 
 app.use("/", fetchRoute);
 

@@ -1,21 +1,32 @@
 const express = require("express");
 const router = express.Router();
 const imageUpload = require("../modules/image");
+const cloudinary = require("../cloudinary");
+const upload = require("../multer");
 
-router.get("/fetched", async (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
   try {
-    const imageFetched = await imageUpload.find();
+    const result = await cloudinary.uploader.upload(req.file.path);
 
     let image = new imageUpload({
-      ImageUrl: result.secure_url,
       label: req.body.label,
+      ImageUrl: result.secure_url,
       cloudinary_id: result.public_id,
     });
     console.log(result);
 
-    //save image
     await image.save();
     res.json(image);
+
+    res.json(result);
+  } catch {
+    console.log(error);
+  }
+});
+
+router.get("/", async (req, res) => {
+  try {
+    let imageFetched = await imageUpload.find();
 
     console.log("image fetched :", imageFetched);
     res
@@ -25,5 +36,7 @@ router.get("/fetched", async (req, res) => {
     res.status(500).json({ errorGettingFromDB: err.message });
   }
 });
+
+
 
 module.exports = router;
