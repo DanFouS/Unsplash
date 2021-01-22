@@ -65,7 +65,7 @@ app.use("/upload-images", upload.array("image"), async (req, res) => {
 app.use(express.json());
 
 //R
-// app.use("/upload-images", require("./modules/image"));
+app.use("/upload-images", require("./routes/user-routes"));
 
 app.use("/", fetchRoute);
 

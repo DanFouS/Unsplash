@@ -9,16 +9,13 @@ router.post("/", upload.single("image"), async (req, res) => {
     const result = await cloudinary.uploader.upload(req.file.path);
 
     let image = new imageUpload({
-      label: req.body.label,
+      label: req.body.text,
       ImageUrl: result.secure_url,
       cloudinary_id: result.public_id,
     });
-    console.log(result);
 
     await image.save();
     res.json(image);
-
-    res.json(result);
   } catch {
     console.log(error);
   }
@@ -26,17 +23,25 @@ router.post("/", upload.single("image"), async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    let imageFetched = await imageUpload.find();
-
-    console.log("image fetched :", imageFetched);
-    res
-      .status(200)
-      .json({ message: "Fetched from db successfully", imageFetched });
+    let image = await imageUpload.find();
+    res.json(image);
+    console.log("image  :", image);
   } catch (err) {
-    res.status(500).json({ errorGettingFromDB: err.message });
+    console.log(err);
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    let image = await imageUpload.findById(req.params.id);
 
+    await cloudinary.uploader.destroy(image.cloudinary_id);
+
+    await image.remove();
+    res.json(image);
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 module.exports = router;
