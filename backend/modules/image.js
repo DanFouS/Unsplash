@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
 const imageUpload = mongoose.Schema({
-  label: {
+  name: {
     type: String,
-    required: true,
   },
   ImageUrl: {
     type: String,
-    required: true,
-    cloudinary_id: { type: String },
+  },
+  cloudinary_id: {
+    type: String,
   },
 });
 

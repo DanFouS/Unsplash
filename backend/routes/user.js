@@ -1,22 +1,21 @@
-const express = require("express");
-const router = express.Router();
-const imageUpload = require("../modules/image");
+const router = require("express").Router();
 const cloudinary = require("../cloudinary");
 const upload = require("../multer");
+const imageUpload = require("../modules/image");
 
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
-
     let image = new imageUpload({
-      label: req.body.text,
+      name: req.body.name,
       ImageUrl: result.secure_url,
       cloudinary_id: result.public_id,
     });
 
     await image.save();
     res.json(image);
-  } catch {
+    // res.json(result);
+  } catch (error) {
     console.log(error);
   }
 });
@@ -34,9 +33,7 @@ router.get("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     let image = await imageUpload.findById(req.params.id);
-
     await cloudinary.uploader.destroy(image.cloudinary_id);
-
     await image.remove();
     res.json(image);
   } catch (err) {

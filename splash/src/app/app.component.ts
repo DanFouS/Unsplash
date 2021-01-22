@@ -47,18 +47,4 @@ export class AppComponent {
         console.warn(event);
       });
   }
-  // ngOnInit(): void {
-  //   this.getDatas();
-  // }
-  // getDatas() {
-  //   this.http.get<any>(this._url).subscribe((response) => {
-  //     console.log(response);
-  //     this.datas = response;
-  //   });
-  // }
 }
-// getData(): Observable<images[]> {
-//   return this.http.get<images[]>(this._url).subscribe((response) => {
-//     this.url = response;
-//   })
-// }

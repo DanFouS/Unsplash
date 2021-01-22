@@ -1,25 +1,15 @@
 const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, "./uploads");
-  },
-  filename: (req, file, callback) => {
-    callback(null, Date.now() + "-" + file.originalname);
-  },
-});
 
-const fileFilter = (req, file, callback) => {
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+const path = require("path");
+
+module.exports = multer({
+  storage: multer.diskStorage({}),
+  fileFilter: (req, file, callback) => {
+    let x = path.extname(file.originalname);
+    if (x !== ".jpg" && x !== ".png" && x !== ".jpeg") {
+      callback(new Error("File type is not supported"), false);
+      return;
+    }
     callback(null, true);
-  } else {
-    callback({ message: "needs jpeg or png to upload" }, false);
-  }
-};
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1024 * 1024 },
-  fileFilter: fileFilter,
+  },
 });
-
-module.exports = upload;
