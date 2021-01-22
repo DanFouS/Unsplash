@@ -5,6 +5,18 @@ const imageUpload = require("../modules/image");
 router.get("/fetched", async (req, res) => {
   try {
     const imageFetched = await imageUpload.find();
+
+    let image = new imageUpload({
+      ImageUrl: result.secure_url,
+      label: req.body.label,
+      cloudinary_id: result.public_id,
+    });
+    console.log(result);
+
+    //save image
+    await image.save();
+    res.json(image);
+
     console.log("image fetched :", imageFetched);
     res
       .status(200)

@@ -8,6 +8,7 @@ const imageUpload = mongoose.Schema({
   ImageUrl: {
     type: String,
     required: true,
+    cloudinary_id: { type: String },
   },
 });
 

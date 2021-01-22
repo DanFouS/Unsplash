@@ -3,6 +3,7 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { images } from './images';
 
 // import { Cloudinary } from module('../../../backend/uploads/cloudinary');
 @Component({
@@ -14,6 +15,10 @@ export class AppComponent {
   // title = 'splash';
   url = '';
   selectedFile: any = File;
+  datas = [];
+  imageDirectoryPath: any = 'http://localhost:5000/upload-images';
+  private _url: string =
+    'C:/Users/PC/Desktop/mysplash/backend/modules/datas.js';
   constructor(private http: HttpClient) {}
   onFileSelected(event: any) {
     if (event.target.files) {
@@ -42,23 +47,18 @@ export class AppComponent {
         console.warn(event);
       });
   }
+  // ngOnInit(): void {
+  //   this.getDatas();
+  // }
+  // getDatas() {
+  //   this.http.get<any>(this._url).subscribe((response) => {
+  //     console.log(response);
+  //     this.datas = response;
+  //   });
+  // }
 }
-
-// selectFile(event: any) {
-//   if (event.target.files) {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(event.target.files[0]);
-//     reader.onload = (event: any) => {
-//       this.url = event.target.result;
-//       console.log(this.url);
-
-//       this.http
-//         .post('http://localhost:5000/upload-images', {
-//           image: this.url,
-//         })
-//         .subscribe((data) => {
-//           console.log(data);
-//         });
-//     };
-//   }
+// getData(): Observable<images[]> {
+//   return this.http.get<images[]>(this._url).subscribe((response) => {
+//     this.url = response;
+//   })
 // }
