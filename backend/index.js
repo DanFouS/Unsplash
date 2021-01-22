@@ -9,6 +9,7 @@ const Schema = mongoose.Schema;
 const fs = require("fs");
 const app = express();
 const fetchRoute = require("../backend/routes/user-routes");
+const mot = require("./modules/image");
 
 require("dotenv").config();
 
@@ -37,30 +38,32 @@ db.on("error", function (error) {
 });
 
 // post request to cloudinary
-app.use("/upload-images", upload.array("image"), async (req, res) => {
-  const uploader = async (path) => await cloudinary.uploads(path, "images");
+// app.use("/upload-images", upload.array("image"), async (req, res) => {
+//   const uploader = async (path) => {
+//     const iiimage = await cloudinary.uploads(path, "images");
+//     res.json(iiimage);
+//   };
+//   if (req.method === "POST") {
+//     const urls = [];
+//     const files = req.files;
+//     for (const file of files) {
+//       const { path } = file;
+//       const newPath = await uploader(path);
+//       urls.push(newPath);
 
-  if (req.method === "POST") {
-    const urls = [];
-    const files = req.files;
-    for (const file of files) {
-      const { path } = file;
-      const newPath = await uploader(path);
-      urls.push(newPath);
-
-      fs.unlinkSync(path);
-    }
-    console.warn("IT WORKS I SWEAR IT WORKS");
-    res.status(200).json({
-      message: "image uploaded successfully",
-      data: urls,
-    });
-  } else {
-    res.status(405).json({
-      err: "error check again your image wasn't uploaded",
-    });
-  }
-});
+//       fs.unlinkSync(path);
+//     }
+//     console.warn("IT WORKS I SWEAR IT WORKS");
+//     res.status(200).json({
+//       message: "image uploaded successfully",
+//       data: urls[0].url,
+//     });
+//   } else {
+//     res.status(405).json({
+//       err: "error check again your image wasn't uploaded",
+//     });
+//   }
+// });
 //mw
 app.use(express.json());
 
